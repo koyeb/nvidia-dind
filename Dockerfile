@@ -2,9 +2,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-# Supported base images: Ubuntu 24.04, 22.04, 20.04
+
 ARG DISTRIB_IMAGE=ubuntu
+# Supported base images: Ubuntu 24.04, 22.04, 20.04
 ARG DISTRIB_RELEASE=24.04
+
+FROM docker:dind as docker-dind
 FROM ${DISTRIB_IMAGE}:${DISTRIB_RELEASE}
 ARG DISTRIB_IMAGE
 ARG DISTRIB_RELEASE
@@ -21,7 +24,6 @@ RUN apt-get clean && apt-get update && apt-get install --no-install-recommends -
     git \
     gnupg \
     software-properties-common \
-    supervisor \
     wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/debconf/* /var/log/* /tmp/* /var/tmp/*
 
@@ -42,11 +44,16 @@ RUN mkdir -pm755 /etc/apt/keyrings && curl -o /etc/apt/keyrings/docker.asc -fsSL
     apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/debconf/* /var/log/* /tmp/* /var/tmp/* && \
     nvidia-ctk runtime configure --runtime=docker
 
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod -f 755 /usr/local/bin/entrypoint.sh
-COPY supervisord.conf /etc/supervisord.conf
-RUN chmod -f 755 /etc/supervisord.conf
+COPY --from=docker-dind /usr/local/bin/docker-init /usr/local/bin/docker-init
+
+# https://github.com/docker-library/docker
+ADD https://raw.githubusercontent.com/docker-library/docker/master/modprobe.sh /usr/local/bin/modprobe
+ADD https://raw.githubusercontent.com/docker-library/docker/master/dockerd-entrypoint.sh /usr/local/bin/
+ADD https://raw.githubusercontent.com/docker-library/docker/master/docker-entrypoint.sh /usr/local/bin/
+ADD https://raw.githubusercontent.com/moby/moby/master/hack/dind /usr/local/bin/dind
+
+RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/docker-entrypoint.sh /usr/local/bin/dind
 
 VOLUME /var/lib/docker
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+ENTRYPOINT ["dockerd-entrypoint.sh"]
