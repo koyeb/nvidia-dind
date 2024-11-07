@@ -25,6 +25,6 @@ jobs:
           push: true
           context: .
           file: Dockerfile
-          tags: nvidia-dind:latest
+          tags: koyeb/nvidia-dind:latest
           outputs: |
             type=registry,compression=zstd
