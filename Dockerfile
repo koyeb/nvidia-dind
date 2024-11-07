@@ -7,7 +7,7 @@ ARG DISTRIB_IMAGE=ubuntu
 # Supported base images: Ubuntu 24.04, 22.04, 20.04
 ARG DISTRIB_RELEASE=24.04
 
-FROM docker:dind as docker-dind
+FROM docker:dind AS docker-dind
 FROM ${DISTRIB_IMAGE}:${DISTRIB_RELEASE}
 ARG DISTRIB_IMAGE
 ARG DISTRIB_RELEASE
