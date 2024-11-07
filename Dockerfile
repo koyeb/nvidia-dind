@@ -52,8 +52,10 @@ ADD https://raw.githubusercontent.com/docker-library/docker/master/dockerd-entry
 ADD https://raw.githubusercontent.com/docker-library/docker/master/docker-entrypoint.sh /usr/local/bin/
 ADD https://raw.githubusercontent.com/moby/moby/master/hack/dind /usr/local/bin/dind
 
-RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/docker-entrypoint.sh /usr/local/bin/dind
+ADD https://raw.githubusercontent.com/koyeb/koyeb-docker-compose/refs/heads/master/koyeb-entrypoint.sh /usr/local/bin/koyeb-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/docker-entrypoint.sh /usr/local/bin/dind /usr/local/bin/koyeb-entrypoint.sh
 
 VOLUME /var/lib/docker
 
-ENTRYPOINT ["dockerd-entrypoint.sh"]
+ENTRYPOINT ["koyeb-entrypoint.sh"]
