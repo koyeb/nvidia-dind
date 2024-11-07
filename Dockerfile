@@ -58,4 +58,4 @@ RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/docker-entrypoi
 
 VOLUME /var/lib/docker
 
-ENTRYPOINT ["koyeb-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/koyeb-entrypoint.sh"]
