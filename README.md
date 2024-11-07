@@ -9,3 +9,5 @@ Host is required to have the NVIDIA container toolkit installed and set up. Priv
 ```
 docker run --gpus 1 -it --privileged koyeb/nvidia-dind:latest
 ```
+
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=nvidia-dind&type=docker&image=koyeb%2Fnvidia-dind&privileged=true&service_type=worker&instance_type=gpu-nvidia-rtx-4000-sff-ada&env%5B%5D=&ports=8000%3Bhttp%3B%2F)
